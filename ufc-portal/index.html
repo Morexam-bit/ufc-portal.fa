@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پورتال جامع مسابقات UFC</title>
+    <!-- بارگذاری فونت زیبای وزیرمتن -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        /* تعریف متغیرهای رنگی برای حالت تاریک (پیش‌فرض) */
+        :root {
+            --primary-color: #ff1515;
+            --primary-hover: #d20000;
+            --bg-dark: #0d0e12;
+            --bg-light: #161822;
+            --text-white: #ffffff;
+            --text-gray: #9aa0b3;
+            --border-color: #222533;
+            --header-bg: #06070a;
+            --card-title-bg: #1e2130;
+            --hero-gradient: linear-gradient(135deg, #1e0505 0%, #0d0e12 100%);
+            --instagram-color: #e1306c;
+            --telegram-color: #0088cc;
+        }
+        
+        /* تغییر متغیرها برای حالت روشن */
+        body.light-theme {
+            --bg-dark: #f4f6f9;
+            --bg-light: #ffffff;
+            --text-white: #1e2229;
+            --text-gray: #656d7d;
+            --border-color: #e2e5ec;
+            --header-bg: #ffffff;
+            --card-title-bg: #f0f2f7;
+            --hero-gradient: linear-gradient(135deg, #ffebee 0%, #f4f6f9 100%);
+        }
+
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Vazirmatn', sans-serif; 
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s, transform 0.2s; 
+        }
+        
+        body { 
+            background-color: var(--bg-dark); 
+            color: var(--text-white); 
+            padding-bottom: 20px; 
+            overflow-x: hidden; 
+        }
+        
+        /* هدر پورتال */
+        header {
+            background-color: var(--header-bg);
+            border-bottom: 2px solid var(--border-color);
+            padding: 15px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo img { height: 35px; }
+        .logo span { font-size: 1.5rem; font-weight: 900; color: var(--text-white); letter-spacing: 0.5px; }
+        .logo span span { color: var(--primary-color); }
+        
+        .header-actions { display: flex; align-items: center; gap: 25px; }
+        nav ul { display: flex; list-style: none; gap: 10px; }
+        nav ul li a { 
+            color: var(--text-gray); 
+            text-decoration: none; 
+            font-weight: 700; 
+            cursor: pointer; 
+            padding: 8px 14px; 
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+        nav ul li a:hover { color: var(--primary-color); background-color: rgba(255, 21, 21, 0.05); }
+        nav ul li a.active { color: white; background-color: var(--primary-color); box-shadow: 0 4px 12px rgba(255, 21, 21, 0.25); }
+
+        .theme-toggle {
+            background: none;
+            border: 1.5px solid var(--border-color);
+            color: var(--text-white);
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+        .theme-toggle:hover { border-color: var(--primary-color); color: var(--primary-color); }
+
+        .container { padding: 30px 6%; }
+
+        /* باکس جستجوی آنی */
+        .search-wrapper { position: relative; margin-bottom: 35px; }
+        .search-box {
+            width: 100%;
+            padding: 16px 20px;
+            background-color: var(--bg-light);
+            border: 2px solid var(--border-color);
+            color: var(--text-white);
+            font-size: 1rem;
+            border-radius: 12px;
+        }
+        .search-box:focus { border-color: var(--primary-color); outline: none; box-shadow: 0 4px 20px rgba(255, 21, 21, 0.1); }
+
+        /* بخش خوش‌آمدگویی و آمار (Hero) */
+        .hero-section {
+            background: var(--hero-gradient);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        .hero-text { flex: 1; min-width: 300px; }
+        .hero-text h2 { font-size: 2.2rem; font-weight: 900; margin-bottom: 15px; line-height: 1.4; }
+        .hero-text h2 span { color: var(--primary-color); }
+        .hero-text p { color: var(--text-gray); font-size: 1.05rem; line-height: 1.7; max-width: 600px; }
+        .hero-stats { display: flex; gap: 20px; margin-top: 25px; }
+        .stat-item { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); padding: 12px 20px; border-radius: 10px; text-align: center; }
+        body.light-theme .stat-item { background: rgba(0,0,0,0.02); }
+        .stat-item .num { font-size: 1.3rem; font-weight: 800; color: var(--primary-color); }
+        .stat-item .label { font-size: 0.8rem; color: var(--text-gray); }
+
+        /* بخش نمایش پوستر رویداد و شمارش معکوس */
+        .event-showcase {
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .event-poster-wrapper { 
+            flex: 1; 
+            min-width: 280px; 
+            text-align: center;
+            background-color: #000000;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border: 1px solid var(--border-color);
+        }
+        .event-poster {
+            max-width: 100%;
+            height: 400px;
+            object-fit: cover; 
+            border-radius: 8px;
+            display: block;
+            margin: 0 auto;
+        }
+        .event-details { flex: 1.5; min-width: 300px; display: flex; flex-direction: column; gap: 20px; }
+        .event-badge { background-color: var(--primary-color); color: white; padding: 6px 14px; border-radius: 6px; font-weight: 800; align-self: flex-start; font-size: 0.85rem; }
+        .event-details h3 { font-size: 1.8rem; font-weight: 900; }
+        
+        /* باکس تایمر معکوس */
+        .countdown-container { display: flex; gap: 15px; margin-top: 10px; direction: ltr; justify-content: flex-end; }
+        .countdown-box {
+            background: rgba(255, 21, 21, 0.05);
+            border: 1px solid rgba(255, 21, 21, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 75px;
+            text-align: center;
+        }
+        .countdown-box .time-num { font-size: 1.8rem; font-weight: 900; color: var(--primary-color); }
+        .countdown-box .time-label { font-size: 0.75rem; color: var(--text-gray); margin-top: 5px; font-weight: bold; }
+
+        /* عناوین بخش‌ها */
+        .division-title {
+            background-color: var(--card-title-bg);
+            padding: 14px 20px;
+            margin: 35px 0 20px 0;
+            font-size: 1.25rem;
+            font-weight: 800;
+            border-right: 5px solid var(--primary-color);
+            border-radius: 4px 12px 12px 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .division-title .badge { font-size: 0.8rem; background: rgba(255,255,255,0.08); padding: 4px 12px; border-radius: 20px; color: var(--text-gray); }
+
+        /* کارت‌های اخبار */
+        .news-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+        .news-card {
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+        .news-card:hover { transform: translateY(-5px); border-color: var(--primary-color); }
+        .news-tag {
+            background-color: rgba(255, 21, 21, 0.08);
+            color: var(--primary-color);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            align-self: flex-start;
+        }
+        .news-card h3 { font-size: 1.15rem; font-weight: 800; line-height: 1.5; }
+        .news-card p { color: var(--text-gray); font-size: 0.92rem; line-height: 1.65; flex-grow: 1; }
+        .news-date {
+            font-size: 0.8rem;
+            color: var(--text-gray);
+            border-top: 1px solid var(--border-color);
+            padding-top: 12px;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* کارت مدرن درباره ما */
+        .about-card {
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 50px 40px;
+            max-width: 600px;
+            margin: 40px auto;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .about-avatar {
+            width: 110px;
+            height: 110px;
+            background: linear-gradient(45deg, var(--primary-color), #ff6b6b);
+            color: white;
+            font-size: 2.8rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 auto 25px auto;
+            box-shadow: 0 6px 20px rgba(255, 21, 21, 0.3);
+        }
+        .about-card h2 { font-size: 1.9rem; font-weight: 900; margin-bottom: 8px; color: var(--text-white); }
+        .about-card .role { color: var(--primary-color); font-weight: 800; margin-bottom: 35px; font-size: 1.05rem; letter-spacing: 0.5px; }
+        .social-links { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .social-btn {
+            text-decoration: none;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .social-btn.instagram { background-color: var(--instagram-color); }
+        .social-btn.instagram:hover { background-color: #cd2860; transform: translateY(-3px); }
+        .social-btn.telegram { background-color: var(--telegram-color); }
+        .social-btn.telegram:hover { background-color: #0077b3; transform: translateY(-3px); }
+
+        /* جداول و استایل تصاویر مبارزان */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-light);
+            margin-bottom: 30px;
+        }
+        table { width: 100%; border-collapse: collapse; min-width: 750px; }
+        th, td { padding: 16px 20px; text-align: right; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        th { background-color: var(--header-bg); font-weight: 800; font-size: 0.9rem; color: var(--primary-color); }
+        tr:hover { background-color: rgba(255, 21, 21, 0.02); }
+        
+        .fighter-thumb { 
+            width: 54px; 
+            height: 54px; 
+            object-fit: cover; 
+            border-radius: 50%; 
+            border: 2px solid var(--border-color);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            display: block;
+        }
+        .status-belt { color: #dfb226; font-weight: 800; }
+        body.light-theme .status-belt { color: #b8860b; }
+        .ltr-text { direction: ltr; display: inline-block; font-weight: 600; }
+
+        /* سیستم انیمیشن صفحات */
+        .page-view { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .page-view.active-view { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* دکمه پرش به بالا */
+        #backToTop {
+            display: none; position: fixed; bottom: 30px; left: 30px; z-index: 99;
+            border: none; background-color: var(--primary-color); color: white;
+            cursor: pointer; width: 48px; height: 48px; border-radius: 50%;
+            font-size: 1.2rem; box-shadow: 0 4px 15px rgba(255, 21, 21, 0.3);
+            align-items: center; justify-content: center;
+        }
+        #backToTop:hover { background-color: var(--primary-hover); transform: translateY(-3px); }
+
+        footer { 
+            background-color: var(--header-bg); text-align: center; padding: 25px; 
+            font-size: 0.85rem; color: var(--text-gray); margin-top: 60px; border-top: 1px solid var(--border-color); 
+        }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 15px; padding: 15px; }
+            .header-actions { flex-direction: column; gap: 15px; width: 100%; }
+            nav ul { width: 100%; justify-content: center; flex-wrap: wrap; }
+            .event-showcase { flex-direction: column; text-align: center; }
+            .countdown-container { justify-content: center; }
+            .event-badge { align-self: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- هدر سایت -->
+    <header>
+        <div class="logo">
+            <img src="https://placehold.co/120x40/0d0e12/ff1515?text=UFC" alt="UFC Logo">
+            <span>UFC <span>Portal</span></span>
+        </div>
+        <div class="header-actions">
+            <nav>
+                <ul>
+                    <li><a id="navHome" class="active">خانه</a></li>
+                    <li><a id="navFighters">لیست مبارزان</a></li>
+                    <li><a id="navNews">اخبار مسابقات</a></li>
+                    <li><a id="navAbout">درباره ما</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="themeToggle">حالت روشن</button>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- فیلد جستجوی زنده تک‌صفحه‌ای -->
+        <div class="search-wrapper" id="searchContainer">
+            <input type="text" id="searchInput" class="search-box" placeholder="عبارت مورد نظر خود را جهت جستجوی آنی وارد کنید...">
+        </div>
+
+        <!-- ================= بخش اول: صفحه اصلی (خانه) ================= -->
+        <div id="homeView" class="page-view active-view">
+            <div class="hero-section">
+                <div class="hero-text">
+                    <h2>به مرجع اطلاعات و اخبار <span>UFC</span> خوش آمدید</h2>
+                    <p>دسترسی سریع به مشخصات صوتی و تصویری مبارزان، رنکینگ رسمی دسته‌بندی‌ها و پوشش زنده حواشی دنیای هنرهای رزمی ترکیبی (MMA).</p>
+                    <div class="hero-stats">
+                        <div class="stat-item"><div class="num">۸</div><div class="label">وزن‌های فعال</div></div>
+                        <div class="stat-item"><div class="num">۲۴+</div><div class="label">مبارز برتر</div></div>
+                        <div class="stat-item"><div class="num">بروز</div><div class="label">آخرین اخبار</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- بخش نمایش ایونت و پوستر و شمارش معکوس رویداد UFC 329 -->
+            <div class="division-title">
+                <span>🏆 رویداد ویژه بعدی سازمان</span>
+            </div>
+            <div class="event-showcase">
+                <div class="event-poster-wrapper">
+                    <!-- تصویر پوستر با آدرس آنلاین معتبر جایگزین شد -->
+                    <img src="images/maxbles.avif" alt="UFC 329 Official Poster" class="event-poster">
+                </div>
+                <div class="event-details">
+                    <span class="event-badge">مبارزه فوق‌العاده سنگین‌وزن</span>
+                    <h3>رویداد نبرد بزرگ: McGregor vs Holloway 2</h3>
+                    <p>یکی از هیجان‌انگیزترین و منتظرترین ریمچ‌های تاریخ مبارزات آزاد قفس سرانجام در رویداد رسمی UFC 329 به وقوع می‌پیوندد. تقابل دوباره دو اسطوره تکرار نشدنی سازمان در فایت‌ویک بین‌المللی.</p>
+                    
+                    <div style="margin-top: 15px;">
+                        <h4 style="margin-bottom: 10px; font-weight: 800; color: var(--text-gray);">زمان باقی‌مانده تا شروع رویداد:</h4>
+                        <div class="countdown-container" id="countdown">
+                            <div class="countdown-box">
+                                <div class="time-num" id="seconds">00</div>
+                                <div class="time-label">ثانیه</div>
+                            </div>
+                            <div class="countdown-box">
+                                <div class="time-num" id="minutes">00</div>
+                                <div class="time-label">دقیقه</div>
+                            </div>
+                            <div class="countdown-box">
+                                <div class="time-num" id="hours">00</div>
+                                <div class="time-label">ساعت</div>
+                            </div>
+                            <div class="countdown-box">
+                                <div class="time-num" id="days">00</div>
+                                <div class="time-label">روز</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="division-title">
+                <span>🔥 تیترهای داغ قفس در یک نگاه</span>
+                <span class="badge">۳ خبر برتر اخیر</span>
+            </div>
+
+            <div class="news-container" id="homeNewsContainer">
+                <div class="news-card">
+                    <div class="news-tag">کری‌خوانی داغ</div>
+                    <h3>ایان گری شایعات ناک‌اوت را رد کرد؛ «برنامه‌ام ۴ راند شکنجه و تسلط بر اسلام ماخاچف در UFC 330 است»</h3>
+                    <p>ایان ماچادو گری اعلام کرد که در مبارزه قهرمانی مقابل اسلام ماخاچف به دنبال یک ناک‌اوت شانس و زودهنگام نیست؛ بلکه قصد دارد در طول ۴ راند تسلط کامل، او را در قفس شکنجه کند و سپس کار را تمام سازد.</p>
+                    <div class="news-date"><span>منبع: MMA Mania</span> <span>جدیدترین</span></div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-tag">اعتراف تلخ</div>
+                    <h3>کانر مک‌گریگور: «در مسیر صعود شهاب‌سنگی به قله شهرت، خودم را گم کرده بودم»</h3>
+                    <p>فوق‌ستاره دنیای مبارزات، کانر مک‌گریگور، در مصاحبه‌ای صریح اعتراف کرد که ثروت و شهرت ناگهانی در دوران اوج، باعث شد تمرکز اصلی‌اش را از دست بدهد و در مسیر زندگی ورزشی‌اش گم شود.</p>
+                    <div class="news-date"><span>منبع: MMA Sucka</span> <span>اخیراً</span></div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-tag">هایلایت رویداد</div>
+                    <h3>ویدیو و نتایج UFC باکو؛ ناک‌اوت خیره‌کننده و ۸ ثانیه‌ای یاخیایف در برابر واکر</h3>
+                    <p>در جریان مسابقات مهیج رویداد UFC باکو که از پلتفرم پارامونت پلاس پخش شد، یاخیایف موفق شد با یک ضربه سهمگین در ثانیه هشتم راند اول، واکر را ناک‌اوت کرده و سریع‌ترین پیروزی شب را ثبت کند.</p>
+                    <div class="news-date"><span>منبع: MMA Mania</span> <span>اخیراً</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= بخش دوم: لیست کامل مبارزان فعال سازمان ================= -->
+        <div id="fightersView" class="page-view">
+            
+            <!-- دسته‌بندی سنگین‌وزن -->
+            <div class="division-title">دسته‌بندی سنگین‌وزن (Heavyweight)</div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 70px;">تصویر</th>
+                            <th>نام مبارز</th>
+                            <th>لقب (Nickname)</th>
+                            <th>رکورد رسمی (W-L-D)</th>
+                            <th>ملیت / کشور</th>
+                            <th>وضعیت رنکینگ</th>
+                        </tr>
+                    </thead>
+                    <tbody class="fighter-table">
+                        <tr>
+                            <td><img src="images/JONES_JON.avif" alt="Jon Jones" class="fighter-thumb"></td>
+                            <td><b>جون جونز (Jon Jones)</b></td>
+                            <td>Bones</td>
+                            <td class="ltr-text">27–1–0</td>
+                            <td>ایالات متحده</td>
+                            <td class="status-belt">👑 قهرمان اصلی (Champion)</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/download (5).jpeg" alt="Tom Aspinall" class="fighter-thumb"></td>
+                            <td>تام اسپینال (Tom Aspinall)</td>
+                            <td>-</td>
+                            <td class="ltr-text">15–3–0</td>
+                            <td>انگلستان</td>
+                            <td>قهرمان موقت (Interim)</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/images.webp" alt="Ciryl Gane" class="fighter-thumb"></td>
+                            <td>سیریل گان (Ciryl Gane)</td>
+                            <td>Bon Gamin</td>
+                            <td class="ltr-text">12–2–0</td>
+                            <td>فرانسه</td>
+                            <td>مدعی رتبه ۱</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/download (4).jpeg" alt="Alexander Volkov" class="fighter-thumb"></td>
+                            <td>الکساندر وولکوف (Alexander Volkov)</td>
+                            <td>Drago</td>
+                            <td class="ltr-text">38–10–0</td>
+                            <td>روسیه</td>
+                            <td>مدعی رتبه ۳</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- دسته‌بندی نیمه‌سنگین‌وزن -->
+            <div class="division-title">دسته‌بندی نیمه‌سنگین‌وزن (Light Heavyweight)</div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 70px;">تصویر</th>
+                            <th>نام مبارز</th>
+                            <th>لقب (Nickname)</th>
+                            <th>رکورد رسمی</th>
+                            <th>ملیت</th>
+                            <th>وضعیت رنکینگ</th>
+                        </tr>
+                    </thead>
+                    <tbody class="fighter-table">
+                        <tr>
+                            <td><img src="images/download (3).jpeg" alt="Alex Pereira" class="fighter-thumb"></td>
+                            <td><b>الکس پریرا (Alex Pereira)</b></td>
+                            <td>Poatan</td>
+                            <td class="ltr-text">12–2–0</td>
+                            <td>برزیل</td>
+                            <td class="status-belt">👑 قهرمان اصلی (Champion)</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/download (2).jpeg" alt="Magomed Ankalaev" class="fighter-thumb"></td>
+                            <td>ماگومد آنکالایف (Magomed Ankalaev)</td>
+                            <td>-</td>
+                            <td class="ltr-text">19–1–1</td>
+                            <td>روسیه</td>
+                            <td>مدعی رتبه ۱</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/download (1).jpeg" alt="Jiří Procházka" class="fighter-thumb"></td>
+                            <td>ییری پروژازکا (Jiří Procházka)</td>
+                            <td>BJP</td>
+                            <td class="ltr-text">30–5–1</td>
+                            <td>جمهوری چک</td>
+                            <td>مدعی رتبه ۲</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- دسته‌بندی ولتروزن -->
+            <div class="division-title">دسته‌بندی ولتروزن (Welterweight)</div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 70px;">تصویر</th>
+                            <th>نام مبارز</th>
+                            <th>لقب (Nickname)</th>
+                            <th>رکورد رسمی</th>
+                            <th>ملیت</th>
+                            <th>وضعیت رنکینگ</th>
+                        </tr>
+                    </thead>
+                    <tbody class="fighter-table">
+                        <tr>
+                            <td><img src="images/i (1).png" alt="Belal Muhammad" class="fighter-thumb"></td>
+                            <td><b>بلال محمد (Belal Muhammad)</b></td>
+                            <td>Remember the Name</td>
+                            <td class="ltr-text">24–3–0</td>
+                            <td>ایالات متحده</td>
+                            <td class="status-belt">👑 قهرمان اصلی (Champion)</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/PRATES_CARLOS_05-02.avif" alt="Carlos Prates" class="fighter-thumb"></td>
+                            <td>کارلوس پراتس (Carlos Prates)</td>
+                            <td>The Nightmare</td>
+                            <td class="ltr-text">21–6–0</td>
+                            <td>برزیل</td>
+                            <td>مدعی رتبه ۱</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/MACHADO_GARRY_IAN_11-22.avif" alt="Ian Machado Garry" class="fighter-thumb"></td>
+                            <td>ایان ماچادو گری (Ian Machado Garry)</td>
+                            <td>The Future</td>
+                            <td class="ltr-text">15–0–0</td>
+                            <td>ایرلند</td>
+                            <td>مدعی رتبه ۲</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/USMAN_KAMARU_06-14.avif" alt="Kamaru Usman" class="fighter-thumb"></td>
+                            <td>کامارو عثمان (Kamaru Usman)</td>
+                            <td>The Nigerian Nightmare</td>
+                            <td class="ltr-text">21–4–0</td>
+                            <td>نیجریه</td>
+                            <td>مدعی رتبه ۱۰</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/aaa.avif" alt="Conor McGregor" class="fighter-thumb"></td>
+                            <td><b>کانر مک‌گریگور (Conor McGregor)</b></td>
+                            <td>Notorious</td>
+                            <td class="ltr-text">22–6–0</td>
+                            <td>ایرلند</td>
+                            <td>بخش ولتروزن (فعال)</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/HOLLOWAY_MAX_04-13.avif" alt="Max Holloway" class="fighter-thumb"></td>
+                            <td><b>مکس هالووی (Max Holloway)</b></td>
+                            <td>Blessed</td>
+                            <td class="ltr-text">26–8–0</td>
+                            <td>ایالات متحده</td>
+                            <td>بخش ولتروزن (فعال)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- دسته‌بندی سبک‌وزن -->
+            <div class="division-title">دسته‌بندی سبک‌وزن (Lightweight)</div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 70px;">تصویر</th>
+                            <th>نام مبارز</th>
+                            <th>لقب (Nickname)</th>
+                            <th>رکورد رسمی</th>
+                            <th>ملیت</th>
+                            <th>وضعیت رنکینگ</th>
+                        </tr>
+                    </thead>
+                    <tbody class="fighter-table">
+                        <tr>
+                            <td><img src="images/download.jpeg" alt="Islam Makhachev" class="fighter-thumb"></td>
+                            <td><b>اسلام ماخاچف (Islam Makhachev)</b></td>
+                            <td>-</td>
+                            <td class="ltr-text">26–1–0</td>
+                            <td>روسیه</td>
+                            <td class="status-belt">👑 قهرمان اصلی (Champion)</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/Arman-Tsarukyan-300x218.png" alt="Arman Tsarukyan" class="fighter-thumb"></td>
+                            <td>آرمان تساروکیان (Arman Tsarukyan)</td>
+                            <td>Ahalkalakets</td>
+                            <td class="ltr-text">22–3–0</td>
+                            <td>ارمنستان</td>
+                            <td>مدعی رتبه ۱</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/Charles-Oliveira.png" alt="Charles Oliveira" class="fighter-thumb"></td>
+                            <td>چارلز اولیویرا (Charles Oliveira)</td>
+                            <td>Do Bronx</td>
+                            <td class="ltr-text">34–10–0</td>
+                            <td>برزیل</td>
+                            <td>مدعی رتبه ۲</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/i.png" alt="Justin Gaethje" class="fighter-thumb"></td>
+                            <td>جاستین گیچی (Justin Gaethje)</td>
+                            <td>The Highlight</td>
+                            <td class="ltr-text">25–5–0</td>
+                            <td>ایالات متحده</td>
+                            <td>مدعی رتبه ۳</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- دسته‌بندی پروزن -->
+            <div class="division-title">دسته‌بندی پروزن (Featherweight)</div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 70px;">تصویر</th>
+                            <th>نام مبارز</th>
+                            <th>لقب (Nickname)</th>
+                            <th>رکورد رسمی</th>
+                            <th>ملیت</th>
+                            <th>وضعیت رنکینگ</th>
+                        </tr>
+                    </thead>
+                    <tbody class="fighter-table">
+                        <tr>
+                            <td><img src="images/ili.png" alt="Ilia Topuria" class="fighter-thumb"></td>
+                            <td><b>ایلیا توپوریا (Ilia Topuria)</b></td>
+                            <td>El Matador</td>
+                            <td class="ltr-text">17–1–0</td>
+                            <td>گرجستان / اسپانیا</td>
+                            <td class="status-belt">👑 قهرمان اصلی (Champion)</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/VOLKANOVSKI_ALEXANDER_BELT_01-31.avif" alt="Alexander Volkanovski" class="fighter-thumb"></td>
+                            <td>الکساندر ولکانوفسکی (Alexander Volkanovski)</td>
+                            <td>The Great</td>
+                            <td class="ltr-text">26–4–0</td>
+                            <td>استرالیا</td>
+                            <td>مدعی رتبه ۲</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- دسته‌بندی خروس‌وزن -->
+            <div class="division-title">دسته‌بندی خروس‌وزن (Bantamweight)</div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 70px;">تصویر</th>
+                            <th>نام مبارز</th>
+                            <th>لقب (Nickname)</th>
+                            <th>رکورد رسمی</th>
+                            <th>ملیت</th>
+                            <th>وضعیت رنکینگ</th>
+                        </tr>
+                    </thead>
+                    <tbody class="fighter-table">
+                        <tr>
+                            <td><img src="images/Merab-Dvalishvili.png" alt="Merab Dvalishvili" class="fighter-thumb"></td>
+                            <td><b>مراب دوالیشویلی (Merab Dvalishvili)</b></td>
+                            <td>The Machine</td>
+                            <td class="ltr-text">18–4–0</td>
+                            <td>گرجستان</td>
+                            <td class="status-belt">👑 قهرمان اصلی (Champion)</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/abc.png" alt="Sean O'Malley" class="fighter-thumb"></td>
+                            <td>شان اوملی (Sean O'Malley)</td>
+                            <td>Suga</td>
+                            <td class="ltr-text">18–2–0</td>
+                            <td>ایالات متحده</td>
+                            <td>مدعی رتبه ۱</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- دسته‌بندی مگس‌وزن -->
+            <div class="division-title">دسته‌بندی مگس‌وزن (Flyweight)</div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 70px;">تصویر</th>
+                            <th>نام مبارز</th>
+                            <th>لقب (Nickname)</th>
+                            <th>رکورد رسمی</th>
+                            <th>ملیت</th>
+                            <th>وضعیت رنکینگ</th>
+                        </tr>
+                    </thead>
+                    <tbody class="fighter-table">
+                        <tr>
+                            <td><img src="images/VAN_JOSHUA_BELT_05-09.avif" alt="Joshua Van" class="fighter-thumb"></td>
+                            <td><b>جاشوا ون (Joshua Van)</b></td>
+                            <td>The Fearless</td>
+                            <td class="ltr-text">11–2–0</td>
+                            <td>میانمار / ایالات متحده</td>
+                            <td class="status-belt">👑 قهرمان اصلی (Champion)</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/2560746.png" alt="Alexandre Pantoja" class="fighter-thumb"></td>
+                            <td>الکساندر پانتوخا (Alexandre Pantoja)</td>
+                            <td>The Cannibal</td>
+                            <td class="ltr-text">28–5–0</td>
+                            <td>برزیل</td>
+                            <td>مدعی رتبه ۱</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- بخش زنان -->
+            <div class="division-title">بخش زنان (Women's Divisions)</div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 70px;">تصویر</th>
+                            <th>نام مبارز</th>
+                            <th>وزن / لقب</th>
+                            <th>رکورد رسمی</th>
+                            <th>ملیت</th>
+                            <th>وضعیت رنکینگ</th>
+                        </tr>
+                    </thead>
+                    <tbody class="fighter-table">
+                        <tr>
+                            <td><img src="images/zhang.avif" alt="Zhang Weili" class="fighter-thumb"></td>
+                            <td><b>ژانگ ویلی (Zhang Weili)</b></td>
+                            <td>Strawweight / Magnum</td>
+                            <td class="ltr-text">25–3–0</td>
+                            <td>چین</td>
+                            <td class="status-belt">👑 قهرمان وزن Strawweight</td>
+                        </tr>
+                        <tr>
+                            <td><img src="images/SHEVCHENKO_VALENTINA_BELT_11-15.avif" alt="Valentina Shevchenko" class="fighter-thumb"></td>
+                            <td><b>والنتینا شوچنکو (Valentina Shevchenko)</b></td>
+                            <td>Flyweight / Bullet</td>
+                            <td class="ltr-text">24–4–1</td>
+                            <td>قرقیزستان</td>
+                            <td class="status-belt">👑 قهرمان وزن Flyweight</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ================= بخش سوم: آرشیو کامل اخبار و اطلاعیه‌های سازمان ================= -->
+        <div id="newsView" class="page-view">
+            <div class="division-title"><span>📰 آرشیو کامل اخبار مسابقات</span></div>
+            <div class="news-container" id="allNewsContainer">
+                
+                <div class="news-card">
+                    <div class="news-tag">کری‌خوانی داغ</div>
+                    <h3>ایان گری شایعات ناک‌اوت را رد کرد؛ «برنامه‌ام ۴ راند شکنجه و تسلط بر اسلام ماخاچف در UFC 330 است»</h3>
+                    <p>ایان ماچادو گری اعلام کرد که در مبارزه قهرمانی مقابل اسلام ماخاچف به دنبال یک ناک‌اوت شانس و زودهنگام نیست؛ بلکه قصد دارد در طول ۴ راند تسلط کامل، او را در قفس شکنجه کند و سپس کار را تمام سازد.</p>
+                    <div class="news-date"><span>منبع: MMA Mania</span></div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-tag">اعتراف تلخ</div>
+                    <h3>کانر مک‌گریگور: «در مسیر صعود شهاب‌سنگی به قله شهرت, خودم را گم کرده بودم»</h3>
+                    <p>فوق‌ستاره دنیای مبارزات، کانر مک‌گریگور، در مصاحبه‌ای صریح اعتراف کرد که ثروت و شهرت ناگهانی در دوران اوج، باعث شد تمرکز اصلی‌اش را از دست بدهد و در مسیر زندگی ورزشی‌اش گم شود.</p>
+                    <div class="news-date"><span>منبع: MMA Sucka</span></div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-tag">هایلایت رویداد</div>
+                    <h3>ویدیو و نتایج UFC باکو؛ ناک‌اوت خیره‌کننده و ۸ ثانیه‌ای یاخیایف در برابر واکر</h3>
+                    <p>در جریان مسابقات مهیج رویداد UFC باکو که از پلتفرم پارامونت پلاس پخش شد، یاخیایف موفق شد با یک ضربه سهمگین در ثانیه هشتم راند اول، واکر را ناک‌اوت کرده و سریع‌ترین پیروزی شب را ثبت کند.</p>
+                    <div class="news-date"><span>منبع: MMA Mania</span></div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-tag">پایان یک دوران</div>
+                    <h3>مبارز کهنه‌کار UFC و قهرمان سابق سازمان KSW از دنیای MMA خداحافظی کرد</h3>
+                    <p>یکی از چهره‌های باسابقه قفس و قهرمان پیشین سازمان مطرح KSW که سابقه مبارزات متعددی در سازمان یو‌اف‌سی دارد، به طور رسمی بازنشستگی نهایی خود را از هنرهای رزمی ترکیبی اعلام نمود.</p>
+                    <div class="news-date"><span>منبع: Sherdog</span></div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-tag">مصاحبه ویژه</div>
+                    <h3>اعتراف الکس پریرا درباره جان جونز و تمایل به مبارزه با حمزه چیمایف</h3>
+                    <p>الکس پریرا اعتراف کرد که از نظر مالی و میراث ورزشی، جان جونز بزرگ‌ترین مبارزه ممکن برای اوست. با این حال، او تاکید کرد که چالش مبارزه با حمزه چیمایف نیز همچنان برای او بسیار جذاب است.</p>
+                    <div class="news-date"><span>منبع: MMA Sucka</span></div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-tag">تحلیل قهرمان</div>
+                    <h3>ارزیابی جان جونز از مبارزه ماخاچف و گری؛ «اسلام یک GOAT است»</h3>
+                    <p>جونز، قهرمان سنگین‌وزن، با تمجید از عملکرد فوق‌العاده اسلام ماخاچف در آستانه رویدادهای آینده، او را شایسته لقب یکی از بزرگ‌ترین مبارزان تمام دوران (GOAT) دانست.</p>
+                    <div class="news-date"><span>منبع: MMA Weekly</span></div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-tag">خط و نشان</div>
+                    <h3>خط و نشان جاستین گیچی برای کانر مک‌گریگور قبل از ریمچ با مکس هالووی</h3>
+                    <p>جاستین گیچی پیش از مبارزه حساس خود اعلام کرد که هدف اصلی‌اش پس از این مسابقه، بستن دهان کانر مک‌گریگور در داخل قفس اختاگون خواهد بود.</p>
+                    <div class="news-date"><span>منبع: Fox Sports</span></div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-tag">تغییر فیزیکی</div>
+                    <h3>تغییر وزن شدید مایکل چندلر دو هفته پس از رویداد UFC Freedom 250</h3>
+                    <p>چندلر تنها دو هفته پس از مبارزه نفس‌گیرش در دسته سبک‌وزن، تصاویر عجیبی از افزایش وزن و تغییر سایز ناگهانی بدن خود منتشر کرده که تعجب کارشناسان را برانگیخته است.</p>
+                    <div class="news-date"><span>منبع: MMA Sucka</span></div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-tag">تشابه اسمی</div>
+                    <h3>پیشرفت سریع پروژه مس شرکت معدنی Midnight Sun (با نماد MMA) در زامبیا</h3>
+                    <p>گزارش مالی بازار سرمایه از پیشرفت اکتشافات گسترده مس در زامبیا توسط کمپانی بزرگ Midnight Sun که با نماد معاملاتی MMA در بورس شناخته می‌شود.</p>
+                    <div class="news-date"><span>منبع: TradingView</span></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= بخش چهارم: درباره ما (مشخصات توسعه‌دهنده) ================= -->
+        <div id="aboutView" class="page-view">
+            <div class="about-card">
+                <div class="about-avatar">MB</div>
+                <h2>MohammadReza Behrouzi</h2>
+                <div class="role">توسعه‌دهنده و طراح ارشد پلتفرم</div>
+                
+                <div class="social-links">
+                    <a href="https://instagram.com/mo.rexam" target="_blank" class="social-btn instagram">
+                        📸 اینستاگرام: mo.rexam
+                    </a>
+                    <a href="https://t.me/morexam" target="_blank" class="social-btn telegram">
+                        ✈️ تلگرام: morexam
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- دکمه شناور پرش به بالا -->
+    <button id="backToTop" title="پرش به بالا">↑</button>
+
+    <!-- فوتر -->
+    <footer>
+        <p>حقوق مادی و معنوی محفوظ است | توسعه داده شده توسط مرجع تخصصی یو‌اف‌سی</p>
+    </footer>
+
+    <script>
+        // دکمه تغییر تم لایت/دارک وب‌سایت
+        const themeToggleBtn = document.getElementById('themeToggle');
+        themeToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            themeToggleBtn.textContent = document.body.classList.contains('light-theme') ? 'حالت تاریک' : 'حالت روشن';
+        });
+
+        // مدیریت ناوبری هوشمند تک‌صفحه‌ای (Single Page Application)
+        const navHome = document.getElementById('navHome');
+        const navFighters = document.getElementById('navFighters');
+        const navNews = document.getElementById('navNews');
+        const navAbout = document.getElementById('navAbout');
+
+        const homeView = document.getElementById('homeView');
+        const fightersView = document.getElementById('fightersView');
+        const newsView = document.getElementById('newsView');
+        const aboutView = document.getElementById('aboutView');
+        const searchContainer = document.getElementById('searchContainer');
+        const searchInput = document.getElementById('searchInput');
+
+        function switchView(activeNav, activeView) {
+            [navHome, navFighters, navNews, navAbout].forEach(nav => nav.classList.remove('active'));
+            [homeView, fightersView, newsView, aboutView].forEach(view => view.classList.remove('active-view'));
+            
+            activeNav.classList.add('active');
+            activeView.classList.add('active-view');
+            
+            // مخفی‌سازی باکس سرچ در صفحه درباره ما جهت ارتقای زیبایی بصری
+            if(activeView === aboutView) {
+                searchContainer.style.display = 'none';
+            } else {
+                searchContainer.style.display = 'block';
+            }
+            
+            searchInput.value = ""; 
+            resetFilters();
+        }
+
+        navHome.addEventListener('click', () => switchView(navHome, homeView));
+        navFighters.addEventListener('click', () => switchView(navFighters, fightersView));
+        navNews.addEventListener('click', () => switchView(navNews, newsView));
+        navAbout.addEventListener('click', () => switchView(navAbout, aboutView));
+
+        function resetFilters() {
+            document.querySelectorAll('.fighter-table tr').forEach(row => row.style.display = '');
+            document.querySelectorAll('.news-card').forEach(card => card.style.display = '');
+        }
+
+        // سیستم شمارش معکوس زنده برای ایونت بزرگ UFC 329 (۱۱ جولای ۲۰۲۶)
+        const targetDate = new Date("July 11, 2026 22:00:00").getTime();
+
+        const countdownInterval = setInterval(function() {
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((difference % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = d < 10 ? "0" + d : d;
+            document.getElementById("hours").innerText = h < 10 ? "0" + h : h;
+            document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
+            document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
+
+            if (difference < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById("countdown").innerHTML = "<div style='color: var(--primary-color); font-weight: 900; font-size: 1.2rem;'>رویداد آغاز شده است!</div>";
+            }
+        }, 1000);
+
+        // رفتار دکمه بازگشت به بالا
+        const backToTopBtn = document.getElementById('backToTop');
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                backToTopBtn.style.display = 'flex';
+            } else {
+                backToTopBtn.style.display = 'none';
+            }
+        };
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // سیستم فیلترینگ و جستجوی همزمان هوشمند متناسب با ساب‌پج فعال
+        searchInput.addEventListener('keyup', function() {
+            let filter = this.value.toLowerCase();
+            if (fightersView.classList.contains('active-view')) {
+                document.querySelectorAll('.fighter-table tr').forEach(row => {
+                    row.style.display = row.textContent.toLowerCase().includes(filter) ? '' : 'none';
+                });
+            } else if (newsView.classList.contains('active-view')) {
+                document.querySelectorAll('#allNewsContainer .news-card').forEach(card => {
+                    card.style.display = card.textContent.toLowerCase().includes(filter) ? '' : 'none';
+                });
+            } else if (homeView.classList.contains('active-view')) {
+                document.querySelectorAll('#homeNewsContainer .news-card').forEach(card => {
+                    card.style.display = card.textContent.toLowerCase().includes(filter) ? '' : 'none';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
